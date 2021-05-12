@@ -4,7 +4,17 @@ import math
 import sympy as sp
 from sympy.utilities.lambdify import lambdify
 
+
 def Bisection_Method(f, start_point, end_point, e):
+    """
+    Description:
+    the function calculate roots by the bisection method
+    :param f: polinom function
+    :param start_point: start point section
+    :param end_point: end point section
+    :param e: epsilon- the precision
+    :return: dictionary contains the root and number of iteration
+    """
     a = start_point
     b = end_point
     iterations = 0
@@ -20,6 +30,15 @@ def Bisection_Method(f, start_point, end_point, e):
 
 
 def Newton_Raphson(f, start_point, end_point, e):
+    """
+    Description:
+    the function calculate roots by the Newton Raphson method
+    :param f: polinom function
+    :param start_point: start point section
+    :param end_point: end point section
+    :param e: epsilon- the precision
+    :return: dictionary contains the root and number of iteration
+    """
     iterations = 0
     xr = start_point
     xr1 = xr-(f(xr)/fprime(f)(xr))
@@ -32,6 +51,15 @@ def Newton_Raphson(f, start_point, end_point, e):
 
 
 def Secant_Method(f, start_point, end_point, e):
+    """
+    Description:
+    the function calculate roots by the Secant Method method
+    :param f: polinom function
+    :param start_point: start point section
+    :param end_point: end point section
+    :param e: epsilon- the precision
+    :return: dictionary contains the root and number of iteration
+    """
     iterations = 0
     xr_minus1 = start_point
     xr = end_point
@@ -46,6 +74,11 @@ def Secant_Method(f, start_point, end_point, e):
 
 
 def CalcRoots():
+    """
+    Description:
+    The function lets to select the method by which we calculate the roots.
+    If the function has no roots, you will be notified
+    """
     roots = {}
     epsilon = 0.0001
     start_point = -5  # start range
@@ -100,15 +133,34 @@ def CalcRoots():
 
 
 def f(x):
+    """
+    Description:
+    the polinom function
+    the function calculate the value of the polinom for x
+    :param x: value of x
+    :return: value of f(x)
+    """
     return x ** 4 + x ** 3 - 3 * (x ** 2)
 
 
 def Check_0(f):
+    """
+    Description:
+    the function cheak if at the point x the value of the fuction f is 0
+    :param f: the function
+    :return: dictionary contains root 0
+    """
     if f(0) == 0:
         return {0: 0}
 
 
 def fprime(f):
+    """
+    Description:
+    the function find the prime function of f
+    :param f: function
+    :return: prime function of f
+    """
     x = sp.symbols('x')
     f = f(x)
     f_prime = f.diff(x)
