@@ -8,7 +8,7 @@ def Bisection_Method(f, start_point, end_point, e):
     a = start_point
     b = end_point
     iterations = 0
-    error = - ((math.log(e/(b-a))) / math.log(2))
+    error = math.ceil(- ((math.log(e/(b-a))) / math.log(2)))
     while (abs(b-a) > e) and (iterations+1 < error):
         iterations += 1
         c = (a+b) / 2
@@ -18,16 +18,32 @@ def Bisection_Method(f, start_point, end_point, e):
             b = c
     return {c: iterations}
 
-def Check_0(f):
-    if f(0) == 0:
-        return {0: 0}
-    #check if none?
 
 def Newton_Raphson(f, start_point, end_point, e):
-    pass
+    iterations = 0
+    xr = start_point
+    xr1 = xr-(f(xr)/fprime(f)(xr))
+    while xr1-xr<e and f(xr)!=0:
+        iterations += 1
+        xr = xr1
+        xr1 = xr - (f(xr) / fprime(f)(xr))
+
+    return {xr1 : iterations}
+
 
 def Secant_Method(f, start_point, end_point, e):
-    pass
+    iterations = 0
+    xr_minus1 = start_point
+    xr = end_point
+    xr_plus1 = (xr_minus1*f(xr)-xr*f(xr_minus1))/(f(xr)-f(xr_minus1))
+    while xr - xr_plus1 < e and f(xr) != 0:
+        iterations += 1
+        xr_minus1 = xr
+        xr = xr_plus1
+        xr_plus1 = (xr_minus1*f(xr)-xr*f(xr_minus1))/(f(xr)-f(xr_minus1))
+
+    return {xr_plus1: iterations}
+
 
 def CalcRoots():
     roots = {}
@@ -64,20 +80,32 @@ def CalcRoots():
                 if f(c) == 0:  # if the root of the function-prime reset the equation, than its a function root
                     roots.update(point)
             if choice == '2':
-                Newton_Raphson(f, x1, x2, epsilon)
+                if Check_0(f) is not None:
+                    roots.update(Check_0(f))  # 0 can be a root, and is a special check
+                roots.update(Newton_Raphson(f, x1, x2, epsilon))
             if choice == '3':
-                Secant_Method(f, x1, x2, epsilon)
+                if Check_0(f) is not None:
+                    roots.update(Check_0(f))  # 0 can be a root, and is a special check
+                roots.update(Secant_Method(f, x1, x2, epsilon))
 
-
+    if choice=='1' and len(roots)==0:
+        print("No roots using the bisection method")
+    if choice=='2' and len(roots)==0:
+        print("No roots using the Newton Raphson method")
+    if choice=='3' and len(roots)==0:
+        print("No roots using the Secant Method method")
     # printing all roots , with thier number of iterations
     for root, iterations in roots.items():
         print("The root is:", round(root, 6), "| number of iterations:", iterations)
 
 
 def f(x):
-    return x ** 2 - 2 * x + 1
+    return x ** 4 + x ** 3 - 3 * (x ** 2)
 
-# return x ** 4 + x ** 3 - 3 * (x ** 2)
+
+def Check_0(f):
+    if f(0) == 0:
+        return {0: 0}
 
 
 def fprime(f):
@@ -89,5 +117,5 @@ def fprime(f):
     return f_prime
 
 
-
+# main
 CalcRoots()
